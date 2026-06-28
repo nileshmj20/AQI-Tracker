@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: aqi-tracker
+    runtime: python
+    plan: free
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: bash start.sh
+    healthCheckPath: /api/health
+    envVars:
+      - key: AQI_TRACKER_ENV
+        value: production
+      - key: AQI_TRACKER_VERBOSE
+        value: "0"
+      - key: AQI_RATE_LIMIT_REQUESTS
+        value: "120"
+      - key: AQI_RATE_LIMIT_WINDOW_SECONDS
+        value: "60"
+      - key: NOMINATIM_USER_AGENT
+        value: AQI-Tracker/2.2 (Render deployment)
+      - key: WAQI_API_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

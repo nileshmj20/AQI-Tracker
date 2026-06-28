@@ -1,0 +1,21 @@
+{
+  "name": "AQI Tracker",
+  "short_name": "AQI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050611",
+  "theme_color": "#39ffa6",
+  "description": "Live AQI, weather, disaster watch, radio and AI reports.",
+  "icons": [
+    {
+      "src": "assets/aqi-tracker-logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/aqi-tracker-logo-square.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

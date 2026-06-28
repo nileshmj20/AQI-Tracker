@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050611" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <title>AQI Tracker · Live Air Intelligence</title>
+  <meta name="description" content="AQI Tracker is a premium live air-quality dashboard with a realistic zoomable globe, AQI layers, weather, disaster watch, visitor guidance, button explanations and reports." />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/layout.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/charts.css" />
+  <link rel="stylesheet" href="styles/globe.css" />
+  <link rel="stylesheet" href="styles/radio.css" />
+  <link rel="stylesheet" href="styles/pages.css" />
+  <link rel="stylesheet" href="styles/responsive.css" />
+</head>
+<body class="is-booting">
+  <div class="boot-screen" id="bootScreen" aria-live="polite">
+    <div class="boot-panel">
+      <img src="assets/aqi-tracker-logo-icon.png" alt="AQI Tracker logo" class="boot-logo" />
+      <p class="boot-kicker">AQI TRACKER SYSTEM</p>
+      <h1>Booting air intelligence…</h1>
+      <div class="boot-lines" aria-label="Boot progress">
+        <span>Loading satellite globe engine</span>
+        <span>Syncing AQI layers and city markers</span>
+        <span>Preparing visitor safety insights</span>
+      </div>
+      <div class="boot-bar"><i></i></div>
+    </div>
+  </div>
+
+  <div class="dashboard-shell" id="dashboardShell">
+    <aside class="side-rail" aria-label="Main navigation">
+      <button class="rail-logo" id="homeButton" type="button" aria-label="AQI Tracker home"><img src="assets/aqi-tracker-logo-icon.png" alt="AQI Tracker" /></button>
+      <nav class="rail-nav">
+        <button class="rail-item active" type="button" data-scroll="dashboard" aria-label="Globe section" title="Opens the main interactive globe where users can rotate, zoom and inspect AQI markers.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M4 12h16M12 4c2.4 2.1 3.6 4.8 3.6 8S14.4 17.9 12 20M12 4C9.6 6.1 8.4 8.8 8.4 12S9.6 17.9 12 20"></path></svg></span><strong>Globe</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="layers" aria-label="Layers section" title="Jumps to map layer controls for AQI, heatmap, monitoring stations, roads and terrain.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 21 8l-9 5-9-5 9-5Z"></path><path d="m3 12 9 5 9-5M3 16l9 5 9-5"></path></svg></span><strong>Layers</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="trends" aria-label="Trends section" title="Jumps to charts that explain AQI trend, pollutant load and temperature forecast.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16"></path><path d="M6 15l3-4 4 3 5-7"></path><circle cx="9" cy="11" r="1.2"></circle><circle cx="13" cy="14" r="1.2"></circle><circle cx="18" cy="7" r="1.2"></circle></svg></span><strong>Trends</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="alerts" aria-label="Alerts section" title="Jumps to live risk signals and visitor warnings based on the selected location.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4 21 20H3L12 4Z"></path><path d="M12 9v5M12 17h.01"></path></svg></span><strong>Alerts</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="weather-intel" aria-label="Weather intelligence section" title="Jumps to detailed weather readings like feels-like temperature, rain chance, UV, wind and visibility.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 15.5a5 5 0 0 1 7.8-4.1A4.6 4.6 0 0 1 20 14.2c0 2.2-1.7 3.8-4 3.8H7.2A3.2 3.2 0 0 1 4 15.5Z"></path><path d="M14 4v2M19 7l-1.5 1.5M9 7 7.5 5.5"></path></svg></span><strong>Weather</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="disaster-watch" aria-label="Disaster watch section" title="Jumps to earthquake and natural-event monitoring for the selected region.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 3 20h18L12 3Z"></path><path d="M12 8v5M12 17h.01"></path><path d="M7 20c2-2 8-2 10 0"></path></svg></span><strong>Disaster</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="live-news" aria-label="Live updates section" title="Jumps to a short briefing generated from AQI, weather and disaster signals.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"></path><path d="M8 9h8M8 13h8M8 16h5"></path></svg></span><strong>News</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="areas" aria-label="Areas section" title="Jumps to nearby area AQI cards ranked by local exposure risk.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v5H4zM13 14h7v5h-7z"></path></svg></span><strong>Areas</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="reports" aria-label="Report section" title="Jumps to the report generator for downloading the current location summary.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4M9 11h6M9 15h6M9 18h4"></path></svg></span><strong>Report</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="phase-lab" aria-label="Project lab section" title="Jumps to comparison, favourites, health profile, forecast and live radio features.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18V6M9 18V9M14 18V4M19 18v-7"></path><path d="M3 18h18"></path></svg></span><strong>Lab</strong>
+        </button>
+        <button class="rail-item" type="button" data-scroll="live-radio" aria-label="Live radio section" title="Jumps to the built-in live radio player.">
+          <span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10h16v9H4z"></path><path d="m8 10 8-5"></path><circle cx="8" cy="15" r="1.5"></circle><path d="M12 14h5M12 17h4"></path></svg></span><strong>Radio</strong>
+        </button>
+      </nav>
+      <div class="rail-status" aria-live="polite">
+        <span class="status-dot"></span>
+        <strong>Live AQI</strong>
+        <small data-status-mini>Ready</small>
+      </div>
+    </aside>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="location-picker">
+          <button class="location-dropdown" id="locationMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change dashboard location" title="Opens a quick city menu. Selecting a city updates AQI, weather, hazards, graphs and visitor guidance.">
+            <span class="globe-mini">◎</span>
+            <span class="location-copy"><strong data-top-location>Global Overview</strong><small>Choose city / live satellite AQI</small></span>
+            <span class="chevron">Change</span>
+          </button>
+          <div class="location-menu" id="locationDropdownMenu" hidden></div>
+        </div>
+        <div class="topbar-center" aria-live="polite">
+          <span class="pill live"><i></i> Live</span>
+          <span data-current-date>Loading date…</span>
+          <span class="dot-separator">•</span>
+          <span data-current-time>--:--</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button alert-top" type="button" id="alertsButton" title="Open live alert summary" aria-label="Open live alert summary">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+            <b data-alert-count>3</b>
+          </button>
+          <button class="ghost-button" type="button" id="shareButton" title="Copies or shares the current AQI, weather and risk summary for the selected location.">Share</button>
+          <button class="ghost-button compact-action" type="button" id="presentationModeButton" title="Creates a cleaner demo view for project presentation.">Present</button>
+          <button class="icon-button" type="button" id="fullscreenButton" title="Expands or exits fullscreen dashboard view for presentation or project demo mode">⛶</button>
+        </div>
+      </header>
+
+      <section class="page-banner" aria-live="polite">
+        <div>
+          <p class="eyebrow" data-page-kicker>Overview</p>
+          <h1 data-page-title>Live air quality command centre</h1>
+          <p data-page-description>Focused pages keep the dashboard clean. Use the left navigation to switch between globe, analytics, weather, safety, reports, lab tools and radio.</p>
+        </div>
+        <div class="page-banner-actions"><span class="page-badge" data-page-badge>Square tile UI</span><button class="page-help-button" id="pageHelpButton" type="button" aria-label="How to use this page">?</button></div>
+      </section>
+
+      <main id="dashboard" class="dashboard-grid is-paged">
+        <section class="hero-layout">
+          <article class="earth-card glow-box" aria-label="Interactive AQI globe">
+            <div class="earth-toolbar">
+              <div class="earth-title">
+                <p class="eyebrow">4K Pixel Globe</p>
+                <h1>Explore Earth and the solar system.</h1>
+                <p>Use the pixel-sharp globe for live AQI markers, then zoom into planets below to understand the wider solar system.</p>
+                <div class="hint-row"><span>Drag Earth</span><span>Scroll zoom</span><span>Click AQI markers</span><span>Choose planets</span></div>
+              </div>
+              <div class="earth-actions">
+                <button class="ghost-button" type="button" id="resetGlobeButton" title="Returns the globe to the default zoom, rotation and camera position.">Reset globe</button>
+                <button class="primary-button" type="button" id="refreshButton" title="Reloads AQI, weather and disaster feeds. If live APIs fail, the dashboard keeps a clear hybrid/demo notice.">Refresh now</button>
+              </div>
+            </div>
+
+            <div class="earth-stage" id="earthStage">
+              <canvas id="fallbackEarth" aria-label="Interactive satellite-style globe"></canvas>
+              <div class="earth-loader" data-earth-loader><div class="spinner"></div><span>Building satellite globe…</span></div>
+              <div class="zoom-depth" data-zoom-depth>Zoom 1.0× · Globe view</div>
+              <div class="globe-data-board" aria-label="Live overview information inside globe space">
+                <section class="globe-board-hero">
+                  <span class="board-label">Current city intelligence</span>
+                  <strong data-aqi-value>—</strong>
+                  <b data-aqi-band>Loading</b>
+                  <p><span data-summary-location>Selected location</span> · <span data-refresh-status>Ready</span></p>
+                  <div class="board-aqi-meter"><i data-board-aqi-meter></i></div>
+                </section>
+                <section class="globe-board-grid">
+                  <article><span>Dominant pollutant</span><strong data-pollutant>—</strong><p data-pollutant-note>Checking load</p></article>
+                  <article><span>Temperature</span><strong data-temp>—</strong><p data-weather-note>Weather loading</p></article>
+                  <article><span>Wind</span><strong data-wind>—</strong><p><b data-humidity>—</b> humidity</p></article>
+                  <article><span>Visibility</span><strong data-board-visibility>—</strong><p>Surface clarity</p></article>
+                  <article><span>Pressure</span><strong data-board-pressure>—</strong><p>Atmospheric pressure</p></article>
+                  <article><span>Coordinates</span><strong data-coordinates>—</strong><p data-lon>—</p></article>
+                </section>
+                <section class="globe-board-forecast">
+                  <div class="board-section-title"><span>Next days</span><b>AQI outlook</b></div>
+                  <div class="board-forecast-grid" data-globe-forecast></div>
+                </section>
+                <section class="globe-board-advice">
+                  <div><span>Safety note</span><strong data-board-risk-title>Loading guidance</strong><p data-board-risk-copy>Reading live AQI and weather signals.</p></div>
+                  <div><span>Best action</span><strong data-board-action-title>Wait</strong><p data-board-action-copy>Refresh or choose a city for clearer action.</p></div>
+                </section>
+              </div>
+            </div>
+
+            <div class="globe-insight-dock" aria-label="Globe quick intelligence">
+              <article><span>US AQI</span><strong data-aqi-value>—</strong><p data-aqi-band>Loading</p></article>
+              <article><span>Main pollutant</span><strong data-pollutant>—</strong><p data-pollutant-note>Checking pollutant load</p></article>
+              <article><span>Temperature</span><strong data-temp>—</strong><p data-weather-note>Weather loading</p></article>
+              <article><span>Wind / Humidity</span><strong data-wind>—</strong><p><b data-humidity>—</b> humidity</p></article>
+              <article><span>Coordinates</span><strong data-coordinates>—</strong><p data-lon>—</p></article>
+              <article><span>Refresh</span><strong data-refresh-status>Ready</strong><p data-last-updated>Waiting for update</p></article>
+            </div>
+
+            <div class="aqi-scale" aria-label="US AQI scale">
+              <span><i class="scale-good"></i><b>0-50</b><small>Good</small></span>
+              <span><i class="scale-moderate"></i><b>51-100</b><small>Moderate</small></span>
+              <span><i class="scale-usg"></i><b>101-150</b><small>Unhealthy for Sensitive</small></span>
+              <span><i class="scale-unhealthy"></i><b>151-200</b><small>Unhealthy</small></span>
+              <span><i class="scale-very"></i><b>201-300</b><small>Very Unhealthy</small></span>
+              <span><i class="scale-hazard"></i><b>301+</b><small>Hazardous</small></span>
+            </div>
+          </article>
+
+          <aside class="intel-column">
+            <section class="summary-card glow-box">
+              <div class="card-top"><span>Global AQI</span><button type="button" id="helpAqi" title="Explains the AQI scale and what the numbers mean.">?</button></div>
+              <div class="aqi-big"><strong data-aqi-value>168</strong><span data-aqi-band>Unhealthy</span></div>
+              <p><span data-summary-location>New Delhi, India</span> · <i></i> Live Data</p>
+              <canvas id="miniTrend" height="72"></canvas>
+            </section>
+
+            <section class="weather-card glow-box" id="weatherCard">
+              <div class="card-top"><span>Local Weather</span><button type="button" id="expandWeather" title="Expands or collapses the weather card so visitors can focus on local conditions.">Expand ⛶</button></div>
+              <div class="weather-main"><strong data-temp>28°C</strong><span data-weather-note>Haze</span><div class="weather-icon"></div></div>
+              <div class="weather-grid"><span>Humidity <b data-humidity>32%</b></span><span>Wind <b data-wind>18 km/h</b></span><span>Pressure <b data-pressure>1012 hPa</b></span><span>Visibility <b data-visibility>Good</b></span></div>
+            </section>
+
+          </aside>
+
+          <section class="solar-system-card glow-box" id="solar-system" aria-label="Interactive solar system explorer">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="eyebrow">Solar system explorer</p>
+                <h2>Zoom to every planet</h2>
+                <p class="copy">Tap a planet or use the buttons to focus the view, compare distance, and read clear planet details.</p>
+              </div>
+              <button class="ghost-button" type="button" id="solarResetButton">Reset to Earth</button>
+            </div>
+            <div class="solar-system-layout">
+              <div class="solar-stage" data-solar-stage>
+                <div class="solar-grid"></div>
+                <div class="sun-core" aria-label="Sun"><span>Sun</span></div>
+                <div class="solar-orbit-map" data-solar-orbits></div>
+              </div>
+              <aside class="solar-detail-panel">
+                <p class="eyebrow" data-solar-type>Rocky planet</p>
+                <h3 data-solar-name>Earth</h3>
+                <p data-solar-summary>Live AQI home world. Select a planet to zoom and view details.</p>
+                <div class="solar-detail-grid">
+                  <article><span>Distance</span><strong data-solar-distance>149.6M km</strong></article>
+                  <article><span>Diameter</span><strong data-solar-diameter>12,742 km</strong></article>
+                  <article><span>Day</span><strong data-solar-day>24 hours</strong></article>
+                  <article><span>Year</span><strong data-solar-year>365 days</strong></article>
+                  <article><span>Moons</span><strong data-solar-moons>1</strong></article>
+                  <article><span>Known for</span><strong data-solar-feature>Life + air</strong></article>
+                </div>
+                <div class="planet-nav" data-planet-nav aria-label="Planet selector"></div>
+              </aside>
+            </div>
+          </section>
+
+        </section>
+
+        <section class="layer-control-page glow-box" id="layer-control-page" aria-label="Dedicated map layer controls">
+          <div class="section-heading compact-heading">
+            <div>
+              <p class="eyebrow">Layer control room</p>
+              <h2>Build your own AQI map view</h2>
+              <p class="copy">This tab is only for overlays. Toggle air-quality, heatmap, stations, traffic, roads and terrain without covering the globe page.</p>
+            </div>
+            <span class="pill live"><i></i> Separate from Globe</span>
+          </div>
+          <div class="layer-control-layout">
+            <section class="layers-card glow-box" id="layers">
+              <div class="card-top"><span>Map Layers</span><button type="button" id="customizeLayers" title="Show or hide less-used layer controls.">Customize ▱</button></div>
+              <p class="panel-help">Switch overlays on/off and adjust their strength. These controls change only the visual map view, not the live AQI numbers.</p>
+              <label><input type="checkbox" checked data-layer="aqi" /> <span>Air Quality (AQI)</span> <em class="layer-dots"></em></label>
+              <label><input type="checkbox" checked data-layer="heat" /> <span>AQI Heatmap</span> <input type="range" min="0" max="100" value="78" data-opacity="heat" /></label>
+              <label><input type="checkbox" checked data-layer="stations" /> <span>Monitoring Stations</span> <input type="range" min="0" max="100" value="88" data-opacity="stations" /></label>
+              <label><input type="checkbox" checked data-layer="traffic" /> <span>Traffic Conditions</span> <input type="range" min="0" max="100" value="63" data-opacity="traffic" /></label>
+              <label><input type="checkbox" checked data-layer="roads" /> <span>Roads & Highways</span> <input type="range" min="0" max="100" value="72" data-opacity="roads" /></label>
+              <label><input type="checkbox" checked data-layer="terrain" /> <span>Terrain Relief</span> <input type="range" min="0" max="100" value="84" data-opacity="terrain" /></label>
+            </section>
+            <section class="layer-preview-card" aria-label="Layer preview panel">
+              <div class="layer-preview-map">
+                <span class="preview-road road-a"></span>
+                <span class="preview-road road-b"></span>
+                <span class="preview-heat heat-a"></span>
+                <span class="preview-heat heat-b"></span>
+                <span class="preview-station station-a">168</span>
+                <span class="preview-station station-b">96</span>
+                <span class="preview-station station-c">58</span>
+              </div>
+              <div class="layer-preview-copy">
+                <p class="eyebrow">Preview meaning</p>
+                <h3>Each overlay explains a different map signal</h3>
+                <div class="layer-meaning-grid">
+                  <article><span>AQI</span><strong>Live marker values</strong><p>Shows city-level air quality numbers.</p></article>
+                  <article><span>Heatmap</span><strong>Pollution spread</strong><p>Shows where exposure may be concentrated.</p></article>
+                  <article><span>Stations</span><strong>Monitoring points</strong><p>Shows where readings may come from.</p></article>
+                  <article><span>Traffic</span><strong>Road pressure</strong><p>Useful when NO₂/O₃ levels are high.</p></article>
+                  <article><span>Roads</span><strong>Movement paths</strong><p>Helps compare area risk along routes.</p></article>
+                  <article><span>Terrain</span><strong>Local shape</strong><p>Mountains/valleys can trap pollution.</p></article>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="stat-grid" aria-label="Key readings">
+          <article class="stat-card glow-box"><span>US AQI</span><strong data-aqi-stat>168</strong><p data-aqi-note>Unhealthy for outdoor activity</p></article>
+          <article class="stat-card glow-box"><span>Dominant Pollutant</span><strong data-pollutant>PM2.5</strong><p data-pollutant-note>Fine particulate matter is elevated</p></article>
+          <article class="stat-card glow-box"><span>Selected Coordinates</span><strong data-coordinates>28.6139°N</strong><p data-lon>77.2090°E</p></article>
+          <article class="stat-card glow-box"><span>Refresh Status</span><strong data-refresh-status>Live</strong><p data-last-updated>Updated just now</p></article>
+          <article class="stat-card glow-box"><span>Saved Cities</span><strong data-favourite-count>0</strong><p>Local favourites stored in this browser</p></article>
+          <article class="stat-card glow-box"><span>History Range</span><strong data-history-average>—</strong><p data-history-peak>Average AQI after refreshes</p></article>
+        </section>
+
+        <section class="phase-lab glow-box" id="phase-lab" aria-label="Portfolio upgrade lab">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Portfolio lab</p>
+              <h2>Advanced AQI decisions, saved cities and live audio</h2>
+              <p class="copy">This section combines the full upgrade plan: city comparison, pollutant cards, seven-day forecast, health profile advice, favourites, history KPIs, PDF export and live radio.</p>
+            </div>
+            <span class="pill live"><i></i> Upgraded</span>
+          </div>
+          <div class="phase-action-row">
+            <button class="primary-button" type="button" id="saveFavouriteButton">Save current city</button>
+            <button class="ghost-button" type="button" id="notificationButton">Enable AQI alerts</button>
+            <button class="ghost-button" type="button" id="installPwaButton" hidden>Install app</button>
+          </div>
+          <div class="phase-grid">
+            <article class="phase-card compare-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">Compare cities</p><h3>Live AQI ranking</h3></div>
+              <div class="compare-picker" data-compare-picker></div>
+              <button class="ghost-button full-width" type="button" id="compareCitiesButton">Update comparison</button>
+              <p class="comparison-status" data-comparison-status>Comparison is ready.</p>
+              <div class="phase-chart-shell compare-chart-shell"><canvas id="cityCompareChart"></canvas></div>
+              <div class="comparison-list" data-comparison-list></div>
+            </article>
+            <article class="phase-card pollutant-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">Pollutant profile</p><h3>What is making air unsafe?</h3></div>
+              <div class="pollutant-card-grid" data-pollutant-cards></div>
+            </article>
+            <article class="phase-card forecast-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">Seven-day forecast</p><h3>AQI and weather outlook</h3></div>
+              <div class="phase-chart-shell forecast-chart-shell"><canvas id="forecast7DayChart"></canvas></div>
+              <div class="forecast-strip" data-forecast-strip></div>
+            </article>
+            <article class="phase-card health-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">Health profile mode</p><h3>Personalised safety advice</h3></div>
+              <label class="mini-select-label">User type
+                <select id="healthProfileSelect" aria-label="Select health profile">
+                  <option value="general">General user</option>
+                  <option value="child">Child</option>
+                  <option value="elderly">Elderly person</option>
+                  <option value="asthma">Asthma-sensitive user</option>
+                  <option value="worker">Outdoor worker</option>
+                  <option value="runner">Runner or cyclist</option>
+                </select>
+              </label>
+              <div class="profile-advice" data-profile-advice></div>
+            </article>
+            <article class="phase-card favourites-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">Favourite cities</p><h3>One-click watchlist</h3></div>
+              <div class="favourite-list" data-favourite-list></div>
+            </article>
+            <article class="phase-card history-phase-card">
+              <div class="chart-card-head"><p class="eyebrow">History analytics</p><h3>Recorded AQI behaviour</h3></div>
+              <div class="history-kpi-grid" data-history-kpis></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="visitor-tools glow-box" id="visitor-tools">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Visitor guide</p>
+              <h2>Understand the air in 10 seconds</h2>
+              <p class="copy">Simple cards explain what the current AQI means, what visitors should do, which feature to use first, and whether the data is live, hybrid or demo.</p>
+            </div>
+            <span class="pill" data-visitor-risk>Loading</span>
+          </div>
+          <div class="visitor-grid">
+            <article><span>Health action</span><strong data-visitor-health>Checking latest AQI…</strong><p data-visitor-health-note>Advice updates after you select a location.</p></article>
+            <article><span>Outdoor plan</span><strong data-visitor-outdoor>Plan after update</strong><p data-visitor-outdoor-note>Shows whether outdoor activity is safe for most people.</p></article>
+            <article><span>Main cause</span><strong data-visitor-cause>Pollutant loading…</strong><p data-visitor-cause-note>Helps visitors understand why AQI is rising.</p></article>
+            <article><span>Best feature</span><strong>Use layers + alerts</strong><p>Toggle heatmap, stations, roads and alerts to understand where risk is highest.</p></article>
+            <article><span>Data source</span><strong data-data-source>Checking feeds…</strong><p data-data-source-note>Shows whether the dashboard is live, hybrid, or demo.</p></article>
+          </div>
+        </section>
+
+        <section class="feature-guide glow-box" id="button-guide" aria-label="Feature and button guide">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Feature guide</p>
+              <h2>What every main button does</h2>
+              <p class="copy">This guide helps visitors understand the dashboard without guessing. The buttons work the same way; this section only explains their purpose.</p>
+            </div>
+            <span class="pill">User help</span>
+          </div>
+          <div class="feature-grid">
+            <article><span>Change</span><strong>Quick city switcher</strong><p>Opens a city dropdown. Selecting a city updates the AQI number, location name, weather, alerts, charts, area cards and disaster watch.</p></article>
+            <article><span>Search</span><strong>Find any location</strong><p>Search accepts a city, country or ZIP code. Suggestions appear while typing; clicking a suggestion applies accurate coordinates.</p></article>
+            <article><span>Use my location</span><strong>Browser-based local view</strong><p>Asks for location permission and updates the dashboard using your current coordinates. It is useful when users do not know their exact city name.</p></article>
+            <article><span>Refresh now</span><strong>Reload live signals</strong><p>Checks AQI, weather and disaster feeds again. If a live provider fails, the dashboard stays usable and clearly marks hybrid/demo mode.</p></article>
+            <article><span>Alerts</span><strong>Risk explanation popup</strong><p>Opens a clear alert message based on current AQI, pollutant, weather and hazard signals, so visitors know what action to take.</p></article>
+            <article><span>Reset globe</span><strong>Restore the default globe</strong><p>Returns the globe to the original zoom and rotation after a visitor has dragged, tilted or zoomed too far.</p></article>
+            <article><span>Layers</span><strong>Compare visual data</strong><p>Layer checkboxes show or hide AQI, heatmap, monitoring stations, traffic, roads and terrain. Sliders change overlay visibility.</p></article>
+            <article><span>Share</span><strong>Share current summary</strong><p>Copies or opens the device share menu with the selected city’s AQI, condition and main risk summary.</p></article>
+            <article><span>Fullscreen</span><strong>Presentation mode</strong><p>Expands the dashboard for project demos, classroom display or focused monitoring. Click again or press Escape to exit.</p></article>
+            <article><span>Generate report</span><strong>Download a location report</strong><p>Exports a report from the backend when available. If the backend is not running, the dashboard downloads a clean demo text report so the button still works.</p></article>
+          </div>
+        </section>
+
+        <section class="search-report-row">
+          <article class="search-card glow-box">
+            <div>
+              <p class="eyebrow">Search location</p>
+              <h2>Jump to any city.</h2>
+              <p class="copy">Search, use your current location, or click the AQI markers on the globe to update the complete dashboard.</p>
+              <div class="search-help-list">
+                <span><b>Typing:</b> shows city suggestions when available.</span>
+                <span><b>Search button:</b> applies the typed location to all cards and charts.</span>
+                <span><b>Use my location:</b> asks browser permission and uses your current coordinates.</span>
+              </div>
+            </div>
+            <form id="searchForm" class="search-form" role="search">
+              <div class="search-wrap">
+                <label class="sr-only" for="searchInput">Search city</label>
+                <input id="searchInput" type="search" placeholder="Search city, country or ZIP code" autocomplete="off" aria-describedby="searchHint" />
+                <div class="search-results" id="searchResults" hidden></div>
+              </div>
+              <button class="primary-button" type="submit" title="Updates the full dashboard using the typed city, country or ZIP code.">Search</button>
+              <button class="ghost-button" type="button" id="locateButton" title="Asks for browser location permission and updates the dashboard using your current coordinates.">Use my location</button>
+            </form>
+            <p class="microcopy" id="searchHint">Tip: Choose a suggestion for best accuracy. Pressing Search with a custom name still updates the dashboard using safe fallback coordinates.</p>
+          </article>
+
+          <article class="alert-card glow-box" id="alerts">
+            <div class="section-heading"><div><p class="eyebrow">Live alerts</p><h2>Current risk signals</h2><p class="copy">These alerts translate numbers into simple action points for visitors.</p></div><span class="pill warn" data-alert-level>Caution</span></div>
+            <div class="alert-list" data-alert-list></div>
+          </article>
+        </section>
+
+        <section class="chart-grid" id="trends" aria-label="Charts and trends">
+          <article class="chart-card glow-box">
+            <p class="eyebrow">Forecast</p>
+            <h3>24-hour AQI trend</h3>
+            <p class="chart-note">Higher line means worse air. The 100 and 150 guide lines mark sensitive and unhealthy zones.</p>
+            <canvas id="aqiTrendChart"></canvas>
+            <div class="chart-detail-row" aria-label="AQI chart summary"><span>Average <b data-aqi-chart-avg>—</b></span><span>Peak <b data-aqi-chart-peak>—</b></span><span>Trend <b data-aqi-chart-trend>—</b></span></div>
+            <div class="chart-caption"><span>Low risk</span><span>Moderate</span><span>Unhealthy</span></div>
+          </article>
+          <article class="chart-card glow-box">
+            <p class="eyebrow">Pollutants</p>
+            <h3>Pollutant load vs safe limit</h3>
+            <p class="chart-note">Bars above 100% need attention. Taller bars show which pollutant is driving the AQI.</p>
+            <canvas id="pollutantChart"></canvas>
+            <div class="chart-detail-row" aria-label="Pollutant chart summary"><span>Dominant <b data-pollutant-chart-main>—</b></span><span>Load <b data-pollutant-chart-load>—</b></span></div>
+            <div class="chart-caption"><span>PM = dust/smoke</span><span>NO₂/O₃ = traffic/ozone</span></div>
+          </article>
+          <article class="chart-card glow-box">
+            <p class="eyebrow">Weather</p>
+            <h3>4-day temperature forecast</h3>
+            <p class="chart-note">Orange shows daily high, blue shows daily low. Weather helps explain AQI movement.</p>
+            <canvas id="temperatureChart"></canvas>
+            <div class="chart-detail-row" aria-label="Temperature chart summary"><span>High <b data-temp-chart-high>—</b></span><span>Low <b data-temp-chart-low>—</b></span><span>Range <b data-temp-chart-range>—</b></span></div>
+            <div class="chart-caption"><span>Orange: high</span><span>Blue: low</span></div>
+          </article>
+        </section>
+
+        <section class="advanced-analytics glow-box" id="advanced-analytics" aria-label="Advanced AQI analytics">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Advanced analytics</p>
+              <h2>Turn readings into clear decisions</h2>
+              <p class="copy">These visuals use the same AQI, pollutant and weather data, but explain it with easier charts: gauge, treemap, scatter, radar and local history.</p>
+            </div>
+            <span class="pill">Chart.js powered</span>
+          </div>
+          <div class="advanced-chart-grid">
+            <article class="advanced-chart-card">
+              <div class="chart-card-head"><p class="eyebrow">AQI gauge</p><h3>Current exposure level</h3></div>
+              <div class="aqi-gauge" id="aqiGauge" aria-live="polite">
+                <div class="gauge-track"><span class="gauge-fill"></span><i class="gauge-needle"></i></div>
+                <strong data-gauge-value>—</strong>
+                <p data-gauge-label>Waiting for AQI</p>
+              </div>
+              <p class="chart-note">The needle shows where the selected city sits from Good to Hazardous.</p>
+            </article>
+            <article class="advanced-chart-card">
+              <div class="chart-card-head"><p class="eyebrow">Treemap</p><h3>What dominates the air?</h3></div>
+              <div class="pollutant-treemap" id="pollutantTreemap" aria-live="polite"></div>
+              <p class="chart-note">Larger tiles mean a pollutant is closer to its safety ceiling.</p>
+            </article>
+            <article class="advanced-chart-card">
+              <div class="chart-card-head"><p class="eyebrow">Correlation</p><h3>AQI vs weather</h3></div>
+              <label class="mini-select-label">Compare AQI with
+                <select id="correlationAxis" aria-label="Select AQI correlation axis">
+                  <option value="wind">Wind speed</option>
+                  <option value="humidity">Humidity</option>
+                </select>
+              </label>
+              <canvas id="correlationChart"></canvas>
+              <p class="chart-note">Shows whether AQI rises when wind is low or humidity changes.</p>
+            </article>
+            <article class="advanced-chart-card">
+              <div class="chart-card-head"><p class="eyebrow">Radar</p><h3>Pollution profile</h3></div>
+              <canvas id="radarChart"></canvas>
+              <p class="chart-note">The shape shows if pollution is particulate-heavy, traffic-heavy or ozone-heavy.</p>
+            </article>
+            <article class="advanced-chart-card">
+              <div class="chart-card-head"><p class="eyebrow">Local history</p><h3>7-day recorded AQI</h3></div>
+              <canvas id="localHistoryChart"></canvas>
+              <p class="chart-note" data-history-note>History builds locally from successful dashboard refreshes.</p>
+            </article>
+            <article class="advanced-chart-card action-window-card">
+              <div class="chart-card-head"><p class="eyebrow">Best window</p><h3>When to go outside?</h3></div>
+              <strong data-best-window>Calculating…</strong>
+              <p data-best-window-note>Lowest-AQI 3-hour window appears after forecast loads.</p>
+              <div class="mini-risk-scale"><span>Good</span><span>Moderate</span><span>Unhealthy</span></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="environment-grid" id="weather-intel">
+          <article class="weather-intel-card glow-box">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Weather intelligence</p>
+                <h2>Complete weather conditions</h2>
+                <p class="copy">Visitor-friendly weather details that explain comfort, visibility, rain, wind and outdoor safety for the selected city.</p>
+              </div>
+              <span class="pill live"><i></i> Live weather</span>
+            </div>
+            <div class="weather-metric-grid">
+              <article><span>Feels like</span><strong data-feels-like>—</strong><p>Human comfort temperature.</p></article>
+              <article><span>Rain chance</span><strong data-rain-chance>—</strong><p>Probability of rain today.</p></article>
+              <article><span>UV index</span><strong data-uv-index>—</strong><p data-uv-note>Sun exposure level.</p></article>
+              <article><span>Wind gust</span><strong data-wind-gust>—</strong><p>Sudden strong wind signal.</p></article>
+              <article><span>Cloud cover</span><strong data-cloud-cover>—</strong><p>Sky coverage right now.</p></article>
+              <article><span>Dew point</span><strong data-dew-point>—</strong><p>Humidity comfort indicator.</p></article>
+              <article><span>Visibility</span><strong data-visibility-m>—</strong><p>Useful for travel and haze.</p></article>
+              <article><span>Sunrise / Sunset</span><strong data-sun-times>—</strong><p>Daylight planning.</p></article>
+            </div>
+          </article>
+          <article class="outdoor-planner glow-box">
+            <div class="section-heading"><div><p class="eyebrow">Outdoor planner</p><h2>When should visitors go outside?</h2></div><span class="pill" data-outdoor-score>Calculating</span></div>
+            <div class="planner-list" data-outdoor-plan></div>
+          </article>
+        </section>
+
+        <section class="disaster-page-grid">
+          <article class="disaster-card glow-box" id="disaster-watch">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Disaster watch</p>
+                <h2>Live hazard monitoring</h2>
+                <p class="copy">Tracks earthquake signals and open natural events near the selected region. Useful for visitors, travellers and city safety checks.</p>
+              </div>
+              <span class="pill" data-disaster-risk>Loading</span>
+            </div>
+            <div class="hazard-summary">
+              <article><span>Risk score</span><strong data-risk-score>—</strong><p data-risk-summary>Checking live feeds…</p></article>
+              <article><span>Nearest earthquake</span><strong data-nearest-quake>—</strong><p data-nearest-quake-note>USGS feed loading.</p></article>
+              <article><span>Open natural events</span><strong data-natural-events>—</strong><p data-natural-events-note>NASA EONET loading.</p></article>
+            </div>
+            <div class="hazard-list" data-hazard-list></div>
+          </article>
+        </section>
+
+        <section class="news-page-grid">
+          <article class="news-card glow-box" id="live-news">
+            <div class="section-heading"><div><p class="eyebrow">Live updates</p><h2>What visitors should watch</h2><p class="copy">A concise news-style feed generated from current AQI, weather and hazard signals.</p></div><span class="pill live"><i></i> Auto briefing</span></div>
+            <div class="news-list" data-news-list></div>
+          </article>
+        </section>
+
+        <section class="area-intel glow-box" id="areas">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Area intelligence</p>
+              <h2>Neighbourhood AQI breakdown</h2>
+              <p class="copy">Quickly see which nearby zones need attention. Use these cards with the globe markers to understand local exposure risk.</p>
+            </div>
+            <span class="pill live"><i></i> Auto-ranked</span>
+          </div>
+          <div class="area-cards" data-area-list></div>
+        </section>
+
+        <section class="insight-report-grid">
+          <article class="insight-card-main glow-box">
+            <div class="section-heading"><div><p class="eyebrow">Insight engine</p><h2>Smart recommendations</h2></div><span class="pill" data-insight-source>rule-based</span></div>
+            <div class="insight-grid" data-insights></div>
+          </article>
+          <article class="report-card glow-box" id="reports">
+            <p class="eyebrow">Report generator</p>
+            <h2>Download current location report</h2>
+            <p class="copy">Exports a report from the backend when available. If the backend is not running, the dashboard downloads a clean demo text report so the button still works.</p>
+            <p class="button-help"><b>What it includes:</b> selected location, AQI level, dominant pollutant, weather snapshot, visitor advice and current data mode.</p>
+            <div class="report-button-row">
+              <button class="primary-button" type="button" id="generateReportButton" title="Exports a backend DOCX report when available. If backend report export fails, a clean fallback text report downloads instead.">Generate DOCX</button>
+              <button class="ghost-button" type="button" id="generatePdfReportButton" title="Exports a PDF report with AI or rule-based insights.">Generate PDF</button>
+            </div>
+            <span data-report-status>Ready.</span>
+          </article>
+        </section>
+        <section class="live-radio-section radio-premium glow-box" id="live-radio" aria-label="Live radio station">
+          <div class="radio-premium-head">
+            <div>
+              <p class="eyebrow">Live radio</p>
+              <h2>Sound lounge</h2>
+              <p class="copy">A premium live music page with instant station play, polished controls and a focused station browser.</p>
+            </div>
+          </div>
+
+          <div class="radio-premium-layout">
+            <article class="radio-album-card" aria-label="Now playing radio player">
+              <div class="radio-artwork" aria-hidden="true">
+                <div class="radio-art-orbit"></div>
+                <div class="radio-art-core">
+                  <span data-radio-art-letter>AQI</span>
+                  <i></i>
+                </div>
+                <div class="radio-wave-bars"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+              </div>
+
+              <div class="radio-track-block">
+                <span class="radio-mini-label">Now playing</span>
+                <strong data-radio-name>Select a station</strong>
+                <p data-radio-meta>India stations load by default. Select one station and playback starts instantly.</p>
+              </div>
+
+              <div class="radio-player-panel">
+                <button class="radio-main-play" type="button" id="radioMainToggle" aria-label="Play or pause selected radio station">▶</button>
+                <div class="radio-live-copy">
+                  <span data-radio-live-label>Live stream ready</span>
+                  <strong data-radio-live-action>Choose a station to start</strong>
+                </div>
+                <button class="radio-stop-square" type="button" id="radioStopButton">Stop</button>
+              </div>
+
+              <div class="radio-live-meter" aria-hidden="true">
+                <span>LIVE</span>
+                <div><i></i></div>
+                <span data-radio-mode>Internet radio</span>
+              </div>
+
+              <div class="radio-volume-row">
+                <span>Volume</span>
+                <input id="radioVolumeSlider" type="range" min="0" max="100" value="80" aria-label="Radio volume" />
+                <strong>80%</strong>
+              </div>
+
+              <div class="radio-player-stats">
+                <article><span>Country</span><strong data-radio-country>India</strong></article>
+                <article><span>Quality</span><strong data-radio-kbps>Live</strong></article>
+                <article><span>Status</span><strong data-radio-small-status>Ready</strong></article>
+              </div>
+            </article>
+
+            <article class="radio-browser-card" aria-label="Radio station browser">
+              <div class="radio-browser-top">
+                <div>
+                  <p class="eyebrow">Station browser</p>
+                  <h3>Find your stream</h3>
+                </div>
+                <button class="radio-dropdown-toggle" id="radioDropdownButton" type="button" aria-expanded="false">
+                  <span>Browse</span>
+                  <strong data-radio-count>Loading stations</strong>
+                  <i aria-hidden="true">⌄</i>
+                </button>
+              </div>
+
+              <form id="radioSearchForm" class="radio-search-form">
+                <input id="radioSearchInput" type="search" placeholder="Search Hindi, Bollywood, news, lo-fi..." aria-label="Search radio station" />
+                <button class="ghost-button" type="submit">Search</button>
+              </form>
+
+              <div class="radio-preset-row" aria-label="Quick radio searches">
+                <button type="button" data-radio-preset="Hindi">Hindi</button>
+                <button type="button" data-radio-preset="Bollywood">Bollywood</button>
+                <button type="button" data-radio-preset="News">News</button>
+                <button type="button" data-radio-preset="lofi">Lo-fi</button>
+                <button type="button" data-radio-preset="favourites">Favourites</button>
+              </div>
+
+              <div class="radio-station-panel" data-radio-panel hidden>
+                <div class="radio-station-list" data-radio-stations></div>
+              </div>
+
+              <div class="radio-queue-tips">
+                <article><span>Instant play</span><strong>Tap station</strong><p>No second play click needed.</p></article>
+                <article><span>Streams</span><strong>Provider based</strong><p>Some stations may block browser playback.</p></article>
+              </div>
+            </article>
+          </div>
+          <audio id="radioAudio" preload="none"></audio>
+        </section>
+      </main>
+
+      <footer class="site-footer">AQI Tracker · Air quality + weather + disaster watch · Built with visitor guidance and button explanations</footer>
+    </div>
+  </div>
+
+  <div class="alert-modal" id="alertModal" hidden role="dialog" aria-modal="true" aria-labelledby="alertModalTitle">
+    <div class="alert-modal-panel">
+      <button class="alert-modal-close" id="alertModalClose" type="button" aria-label="Close alert message">×</button>
+      <p class="eyebrow">Live alert message</p>
+      <h2 id="alertModalTitle">Current AQI risk</h2>
+      <div class="alert-modal-body" id="alertModalBody"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@2.3.0/dist/chartjs-chart-treemap.min.js"></script>
+  <script>window.AQI_API_BASE_URL = window.AQI_API_BASE_URL || "";</script>
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--ui-bg);
+  overflow-x: hidden;
+  min-height: 100%;
+  color: var(--cmd-text);
+  overflow: hidden;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  color: var(--ui-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #000;
+  overflow-x: hidden;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border-radius: var(--radius);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.46) 0 1px, transparent 1.6px), linear-gradient(rgba(53, 163, 255, 0.030) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 138, 36, 0.023) 1px, transparent 1px);
+  background-size: 210px 210px, 84px 84px, 84px 84px;
+  opacity: 0.26;
+  mask-image: radial-gradient(circle at 55% 36%, black, transparent 78%);
+  display: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: var(--radius);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+input {
+  font: inherit;
+  border-radius: var(--radius);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+select {
+  font: inherit;
+  border-radius: var(--radius);
+  min-height: 54px;
+  border: 1px solid rgba(145, 177, 216, .30);
+  background: rgba(2, 8, 17, .94);
+  color: var(--ui-text);
+  letter-spacing: .01em;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  width: 100%;
+  padding: 0 16px;
+  font-size: 1rem;
+  font-weight: 850;
+  outline: none;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+a {
+  color: inherit;
+}
+
+canvas {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+body.is-zoomed .detail-map-card {
+  transform: none;
+  opacity: 1;
+  width: 100%;
+  position: relative;
+  inset: auto;
+  max-width: none;
+  display: grid;
+  background: #000;
+  border: 1px solid rgba(112,139,178,.30);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+body.layer-heat-off .heat {
+  display: none;
+}
+
+body.layer-roads-off .road {
+  display: none;
+}
+
+body.layer-traffic-off .metro {
+  display: none;
+}
+
+body.layer-aqi-off .aqi-marker {
+  display: none;
+}
+
+body.is-booting {
+  overflow: hidden;
+}
+
+body.is-welcoming {
+  overflow: auto;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  background: radial-gradient(circle at 18% -12%, rgba(124, 92, 255, .18), transparent 36%), radial-gradient(circle at 82% 0%, rgba(57, 255, 166, .12), transparent 34%), linear-gradient(180deg, #050611, #02040b 72%);
+}

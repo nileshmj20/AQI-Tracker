@@ -1,0 +1,398 @@
+.dashboard-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  background: radial-gradient(circle at 8% -8%, rgba(98, 237, 255, .12), transparent 34%), radial-gradient(circle at 88% 8%, rgba(255, 138, 36, .08), transparent 32%), #000;
+  align-items: start;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.side-rail {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 50;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 7px;
+  padding: 10px 7px;
+  border-right: 1px solid rgba(98, 237, 255, .18);
+  background: #020812;
+  box-shadow: 18px 0 56px rgba(0,0,0,.48);
+  width: 92px;
+  min-width: 92px;
+  overflow: hidden;
+}
+
+.rail-logo {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 8px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  border: 1px solid rgba(100, 235, 255, .65);
+  background: rgba(8, 20, 36, .98);
+  box-shadow: 0 0 0 1px rgba(98,237,255,.08), 0 0 24px rgba(98,237,255,.12);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(98,237,255,.58);
+  margin-bottom: 10px;
+}
+
+.rail-logo:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hot);
+}
+
+.rail-logo span {
+  width: 29px;
+  height: 29px;
+  border-radius: 999px;
+  border: 5px solid var(--blue);
+  border-left-color: rgba(255,255,255,.18);
+  transform: rotate(-35deg);
+}
+
+.rail-nav {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  overflow: visible;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 1px;
+  padding: 0 4px 6px;
+  max-height: calc(100vh - 170px);
+  overflow-x: hidden;
+}
+
+.rail-item {
+  min-height: 58px;
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .026);
+  color: #b7c7dc;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  transition: 180ms ease;
+  border-left-width: 4px;
+}
+
+.rail-item span {
+  font-size: 1.32rem;
+  line-height: 1;
+}
+
+.rail-item strong {
+  font-size: .73rem;
+  line-height: 1.05;
+  margin-top: 2px;
+  letter-spacing: .01em;
+  text-align: center;
+  font-weight: 950;
+  color: #c0ccdc;
+}
+
+.rail-item:hover {
+  color: #fff;
+  border-left-color: var(--cyan);
+  background: linear-gradient(135deg, rgba(98, 237, 255, .14), rgba(255, 138, 36, .07));
+  box-shadow: inset 0 0 26px rgba(53,163,255,.09);
+  border-color: rgba(98, 237, 255, .50);
+}
+
+.rail-item.active {
+  color: #fff;
+  border-left-color: var(--cyan);
+  background: linear-gradient(135deg, rgba(98, 237, 255, .14), rgba(255, 138, 36, .07));
+  box-shadow: inset 4px 0 0 var(--ui-cyan);
+  border-color: rgba(98, 237, 255, .50);
+}
+
+.rail-status {
+  border: 1px solid rgba(145, 177, 216, .24);
+  border-radius: var(--radius);
+  padding: 8px 5px;
+  color: var(--muted);
+  background: rgba(4,10,18,.72);
+  display: none;
+  gap: 4px;
+  text-align: center;
+  font-size: .64rem;
+  margin: 10px auto 0;
+  width: 74px;
+}
+
+.rail-status strong {
+  color: var(--text);
+  font-size: 11px;
+}
+
+.app-shell {
+  width: calc(100vw - 84px);
+  margin: 0 auto;
+  padding: 12px 18px 22px;
+  background: radial-gradient(circle at 55% 0%, rgba(40, 142, 255, .08), transparent 34%), #000;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  max-width: none;
+  border-radius: var(--radius);
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(310px, .9fr) minmax(300px, .85fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(0, 0, 0, .98), rgba(0, 0, 0, .80));
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  min-height: 58px;
+  padding: 6px 0 10px;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(98, 237, 255, .17);
+  border: 0;
+  box-shadow: none;
+  padding-bottom: 12px;
+  margin: 0 0 12px;
+}
+
+.location-dropdown {
+  border: 1px solid rgba(145, 177, 216, .33);
+  background: rgba(6, 14, 27, .92);
+  color: var(--ui-text);
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+  width: 100%;
+  min-height: 48px;
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  text-align: left;
+  border-color: rgba(98,237,255,.38);
+  letter-spacing: .01em;
+}
+
+.topbar-center {
+  border: 1px solid rgba(145, 177, 216, .33);
+  background: rgba(6, 14, 27, .92);
+  color: var(--ui-text);
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+  min-height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: .94rem;
+}
+
+.location-dropdown strong {
+  display: block;
+  font-size: 1.03rem;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -.025em;
+}
+
+.location-dropdown small {
+  display: block;
+  margin-top: 4px;
+  color: #9baabd;
+  font-size: .82rem;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.location-dropdown:hover {
+  transform: none;
+  border-color: rgba(98,237,255,.84);
+  box-shadow: var(--shadow-hot);
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 12px;
+  align-items: start;
+  grid-auto-rows: max-content;
+  padding-bottom: 18px;
+}
+
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(340px, .75fr);
+  gap: 16px;
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+
+.location-picker {
+  position: relative;
+  z-index: 120;
+  min-width: 0;
+}
+
+.location-dropdown[aria-expanded="true"] {
+  transform: none;
+  border-color: rgba(98,237,255,.84);
+  box-shadow: var(--shadow-hot);
+}
+
+.location-dropdown .chevron {
+  display: inline-grid;
+  place-items: center;
+  min-width: 74px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(98,237,255,.38);
+  color: #dff8ff;
+  background: rgba(98,237,255,.055);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.location-dropdown[aria-expanded="true"] .chevron {
+  border-color: rgba(98,237,255,.9);
+  background: rgba(98,237,255,.12);
+}
+
+.location-dropdown:hover .chevron {
+  border-color: rgba(98,237,255,.9);
+  background: rgba(98,237,255,.12);
+}
+
+.rail-logo img {
+  width: 43px;
+  height: 43px;
+  object-fit: contain;
+  display: block;
+  filter: saturate(1.08) contrast(1.05);
+}
+
+.rail-logo:hover img {
+  filter: saturate(1.24) contrast(1.1) drop-shadow(0 0 10px rgba(98,237,255,.46));
+}
+
+.rail-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(145,177,216,.22);
+  background: linear-gradient(135deg, rgba(98,237,255,.05), rgba(0,0,0,.55));
+  box-shadow: inset 0 0 14px rgba(98,237,255,.03);
+}
+
+.rail-item svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rail-item:hover .rail-icon {
+  border-color: rgba(98,237,255,.75);
+  color: var(--cyan);
+  box-shadow: 0 0 18px rgba(98,237,255,.18), inset 0 0 18px rgba(98,237,255,.08);
+}
+
+.rail-item.active .rail-icon {
+  border-color: rgba(98,237,255,.75);
+  color: var(--cyan);
+  box-shadow: 0 0 18px rgba(98,237,255,.18), inset 0 0 18px rgba(98,237,255,.08);
+}
+
+.presentation-mode .side-rail {
+  display: none;
+}
+
+.presentation-mode .app-shell {
+  margin-left: 0;
+}
+
+.presentation-mode .dashboard-grid {
+  max-width: 1480px;
+  margin-inline: auto;
+}
+
+.rail-nav::-webkit-scrollbar {
+  width: 0;
+}
+
+.app-shell::-webkit-scrollbar {
+  width: 10px;
+}
+
+.app-shell::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ui-cyan), var(--ui-orange));
+  border: 2px solid #01040a;
+}
+
+.app-shell::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, .035);
+}
+
+.rail-nav::-webkit-scrollbar-thumb {
+  background: var(--page-accent);
+}
+
+.rail-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
+
+.rail-status small {
+  font-size: 10px;
+}
+
+.rail-item.active strong {
+  color: var(--cmd-text);
+}
+
+.dashboard-shell {
+  background: radial-gradient(circle at 10% -8%, rgba(124, 92, 255, .18), transparent 36%), radial-gradient(circle at 88% 8%, rgba(57, 255, 166, .12), transparent 34%), #050611;
+}
+
+.disaster-page-grid,
+.news-page-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.dashboard-grid.is-paged > .page-visible.disaster-page-grid,
+.dashboard-grid.is-paged > .page-visible.news-page-grid {
+  display: grid;
+}
